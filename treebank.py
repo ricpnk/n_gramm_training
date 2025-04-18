@@ -2,6 +2,7 @@ import datasets
 from sklearn.model_selection import train_test_split
 from collections import defaultdict
 import math
+import numpy as np
 
 def main():
 
@@ -24,6 +25,11 @@ def main():
     for sentence in test_sentences:
         sen_logp = unigram_sentence_logp(sentence, uni_model)
         print(f"logprob of '{sentence}': {sen_logp}")
+
+    #todo calculate the perplexity on test_data
+    test_perplexity = unigram_perplexity(test_data, uni_model)
+    print(f"Perplexity of Testset: {test_perplexity}")
+
     
 
 
@@ -71,13 +77,35 @@ def unigram_sentence_logp(sentence, uni_model):
         if word in uni_model:
             sum_logp += math.log2(uni_model[word])
         else:
-            sum_logp += math.log2(uni_model["<unk>"])
+            return np.inf
     return sum_logp
 
 
-def unigram_perplexity():
+def unigram_perplexity(data, uni_model):
+    """
+    input: dataset and unigram_model
+        compute perplexity of model
+        skip sentence if 'np.inf' 
+    return: perplexity
+    """
+    total_words = 0
+    total_log_prob = 0
+    for sentence in data:
+        log_prob = unigram_sentence_logp(sentence, uni_model)
+
+        if log_prob == np.inf:
+            continue
+        else:
+            # count the totals
+            total_words += len(sentence.split())
+            total_log_prob += log_prob
+
     
-    pass
+    #calculate the perplexity 
+    cross_entropy = -(total_log_prob / total_words)
+    perplexity = 2**cross_entropy
+    
+    return perplexity
 
 
 
