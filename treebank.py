@@ -30,7 +30,15 @@ def main():
     test_perplexity = unigram_perplexity(test_data, uni_model)
     print(f"Perplexity of Testset: {test_perplexity}")
 
-    
+    #todo use rare_words function to clean the datasets
+    threshold = 10
+    clean_train_data = remove_rares(train_data, threshold)
+    clean_test_data = remove_rares(test_data, threshold)
+
+    #todo calculate the new perplexity with clean data
+    clean_uni_model = estimate_unigram(clean_train_data)
+    test_perplexity = unigram_perplexity(clean_test_data, clean_uni_model)
+    print(f"Perplexity of Clean-Testset: {test_perplexity}")
 
 
 
@@ -48,23 +56,20 @@ def add_stop(data):
     return {"sentence": sentence + " <stop>"}
 
 
-def estimate_unigram(sentences):
+def estimate_unigram(data):
     """
     input: trainingsset
     return: dict of the unigram model
 
     use defaultdict
     """
-    return_dict = defaultdict(int)
-    for sentence in sentences:
-        for word in sentence.split():
-            return_dict[word] += 1
+    uni_dict = count_words(data)
 
-    total_dict = sum(return_dict.values())
-    for word in return_dict:
-        return_dict[word] /= total_dict
+    total_dict = sum(uni_dict.values())
+    for word in uni_dict:
+        uni_dict[word] /= total_dict
 
-    return return_dict
+    return uni_dict
 
 
 def unigram_sentence_logp(sentence, uni_model):
@@ -102,12 +107,53 @@ def unigram_perplexity(data, uni_model):
 
     
     #calculate the perplexity 
+    if total_words == 0:
+        return float("inf")
     cross_entropy = -(total_log_prob / total_words)
     perplexity = 2**cross_entropy
     
     return perplexity
 
 
+def remove_rares(data, threshold):
+    """
+    input: dataset, threshold value
+    calculate the frequency
+    remove words and set to <unk>
+    return: clean dataset
+    """
+    frequency_dict = count_words(data)
+
+    #efficient way to create the list with set()
+    rare_words = set(word for word, count in frequency_dict.items() if count <= threshold)
+
+    cleaned_data = []
+    for sentence in data:
+        cleaned_words = []
+        for word in sentence.split():
+            if word not in rare_words:
+                cleaned_words.append(word)
+            else:
+                cleaned_words.append("<unk>")
+        cleaned_data.append(" ".join(cleaned_words))
+
+    return cleaned_data
+
+
+def estimate_bigram(data):
+    """
+    input: dataset
+    use zip to progess bigram pairs
+    unigram and bigram as default dict
+    return: unigram and bigram model
+    """
+    uni_dict = estimate_unigram(data)
+    bi_dict = count_words(data)
+
+
+
+
+    return uni_dict, bi_dict
 
 
 
@@ -115,15 +161,24 @@ def unigram_perplexity(data, uni_model):
 
 
 
-def estimate_bigram():
-    pass
+
+
+
 
 def bigram_sentence_logp():
     pass
 
+def estimate_bigram_smoothed():
+    pass
 
 
 
+def count_words(data):
+    dict = defaultdict(int)
+    for sentence in data:
+        for word in sentence.split():
+            dict[word] += 1
+    return dict
 
 
 
