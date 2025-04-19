@@ -148,7 +148,11 @@ def estimate_bigram(data):
     return: unigram and bigram model
     """
     uni_dict = estimate_unigram(data)
-    bi_dict = count_words(data)
+    bi_dict = defaultdict(int)
+
+    for sentence in data:
+        for word in sentence:
+            
 
 
 
