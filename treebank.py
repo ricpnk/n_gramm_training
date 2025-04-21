@@ -4,8 +4,8 @@ from collections import defaultdict
 import math
 import numpy as np
 
+#! main
 def main():
-
     #todo load the dataset
     data = load_dataset()
 
@@ -60,9 +60,6 @@ def main():
     smoothed_inf_counts, smoothed_bi_perplexity = bigram_perplexity(test_data, smoothed_bigram_model)
     print(f"Perplexity of Smoothed-Bigram-model with Testset: {smoothed_bi_perplexity}")
     print(f"The Smoothed-Bigram-model has: {smoothed_inf_counts} sentences with a probability of zero")
-
-
-
 
 
 
@@ -223,7 +220,6 @@ def estimate_bigram_smoothed(uni_counts, bi_counts, alpha=0.1):
     return smoothed_bigram
 
 
-
 def bigram_perplexity(data, bi_model):
     """
     input: dataset and bigram_model
@@ -245,7 +241,6 @@ def bigram_perplexity(data, bi_model):
             total_words += len(sentence.split())
             total_log_prob += log_prob
 
-    
     #calculate the perplexity 
     if total_words == 0:
         return float("inf")
