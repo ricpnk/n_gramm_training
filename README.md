@@ -1,13 +1,22 @@
 
 # N-Gram Language Modeling
 
+Homework 3 - N-Gram Language Modeling Implementation:
+This project is part of the Natural Language Processing course.
+
 This project implements a collection of count-based language models using the Penn Treebank dataset. It includes Unigram and Bigram models, with and without Laplace smoothing, and allows for evaluation using sentence log-probability and perplexity.
+
+## Requirements
+- python version >=3.10
+- datasets
+- scikit-learn
+- numpy
 
 ## Features
 
 - Unigram model with optional `<unk>` token replacement
 - Bigram model with:
-  - raw frequency-based probabilities
+    - raw frequency-based probabilities
   - Laplace-smoothing support
 - Sentence log-probability computation
 - Perplexity calculation for test datasets
@@ -27,7 +36,7 @@ This project uses [uv](https://github.com/astral-sh/uv) for lightweight Python e
 
 ### 1. Install dependencies
 ```bash
-uv venv
+uv venv --python=3.10
 uv sync
 ```
 
