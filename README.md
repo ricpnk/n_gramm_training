@@ -58,11 +58,8 @@ This will output log-probabilities and perplexities for each model.
 
 ### 4. Optional Extension (Not Required)
 
-You may implement Byte-Pair Encoding (BPE) as a class with train() and apply() methods to segment words using subword units.
 
-## Output Examples
-
-Example output during execution:
+## Output Example
 
 Unigram Model:
 logprob of 'the the the <stop>': -17.052292292248378
