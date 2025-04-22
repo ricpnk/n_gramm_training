@@ -57,8 +57,7 @@ def main():
     smoothed_bigram_model = estimate_bigram_smoothed(uni_counts, bi_counts)
 
     #todo calculate the perplexity of the smoothed bigram model
-    print("\nSmoothed Bigram Model:" \
-    "")
+    print("\nSmoothed Bigram Model:")
     smoothed_inf_counts, smoothed_bi_perplexity = bigram_perplexity(test_data, smoothed_bigram_model)
     print(f"Perplexity of Smoothed-Bigram-model with Testset: {smoothed_bi_perplexity}")
     print(f"The Smoothed-Bigram-model has: {smoothed_inf_counts} sentences with a probability of zero")
