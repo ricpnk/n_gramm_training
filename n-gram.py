@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 from collections import defaultdict
 import math
 import numpy as np
+import random
+from collections import Counter
 
 #! main
 def main():
@@ -61,6 +63,90 @@ def main():
     smoothed_inf_counts, smoothed_bi_perplexity = bigram_perplexity(test_data, smoothed_bigram_model)
     print(f"Perplexity of Smoothed-Bigram-model with Testset: {smoothed_bi_perplexity}")
     print(f"The Smoothed-Bigram-model has: {smoothed_inf_counts} sentences with a probability of zero")
+
+    
+
+
+
+    #? Optional BPE exercise
+    #todo take a few sentences of test_set and tokenize
+    # rand_numbers = []
+    # ex_sentences = []
+    # for i in range(5):
+    #     rand_numbers.append(random.randint(0, len(test_data)))
+    
+    # for idx in rand_numbers:
+    #     ex_sentences = test_data[idx]
+    
+    # for sentence in ex_sentences:
+    #     words = sentence.split()
+
+
+
+
+
+#! Classes
+
+class BPE():
+
+    def __init__(self, ):
+        self.vocab = {}
+        self.merge_rules = []
+
+
+    def train(self, sentences, merges=50):
+
+        # Prepare the vocabulary as a mapping of space-separated character sequences
+        vocab = Counter()
+        for sentence in sentences:
+            for word in sentence.split():
+                chars = list(word) + ["</w>"]
+                token = " ".join(chars)
+                vocab[token] += 1
+
+        for i in range(merges):
+            # Count all symbol pairs
+            pair_counts = Counter()
+            for word, freq in vocab.items():
+                chars = word.split()
+                pairs = zip(chars[:-1], chars[1:])
+                for pair in pairs:
+                    pair_counts[pair] += freq
+
+            if not pair_counts:
+                break
+
+            # Get the most frequent pair
+            most_common_pair = pair_counts.most_common(1)[0][0]
+            self.merge_rules.append(most_common_pair)
+
+            # Merge all occurrences of that pair in the vocabulary
+            new_vocab = {}
+            pattern = " ".join(most_common_pair)
+            replacement = "".join(most_common_pair)
+            for word in vocab:
+                new_word = word.replace(pattern, replacement)
+                new_vocab[new_word] = vocab[word]
+            vocab = new_vocab
+
+        self.vocab = vocab
+
+
+    def apply():
+        """
+        - split to chars
+        - apply the merge-rules sequential
+        - return the subword tokens
+        """
+
+
+
+        pass
+
+
+
+
+
 
 
 
