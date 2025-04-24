@@ -34,7 +34,7 @@ def main():
     print(f"Perplexity of Testset: {test_perplexity}")
 
     #todo use rare_words function to clean the datasets
-    threshold = 5
+    threshold = 3
     clean_train_data = remove_rares(train_data, threshold)
     clean_test_data = remove_rares(test_data, threshold)
 
@@ -138,9 +138,6 @@ class BPE():
         - apply the merge-rules sequential
         - return the subword tokens
         """
-
-
-
         pass
 
 
@@ -283,7 +280,7 @@ def bigram_sentence_logp(sentence, bi_model):
     return sum_logp
 
 
-def estimate_bigram_smoothed(uni_counts, bi_counts, alpha=0.1):
+def estimate_bigram_smoothed(uni_counts, bi_counts, alpha=0.05):
     """
     input: dataset, scalar alpha
     consider memory efficiency
